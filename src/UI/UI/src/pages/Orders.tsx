@@ -5,10 +5,12 @@ import Pagination from "../components/Pagination";
 import { Link } from "react-router-dom";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useDeleteOrder } from "../features/orders/hooks/useDeleteOrder";
+import { useTitle } from "../hooks/useTitle";
 
 const MAX_SIZE = 5;
 
 const Orders = () => {
+  useTitle("Orders | LunoStore");
   const [page, setPage] = useState<number>(1);
   const { data: orders, isLoading } = useGetAllOrders();
   const { mutate: deleteOrder } = useDeleteOrder();

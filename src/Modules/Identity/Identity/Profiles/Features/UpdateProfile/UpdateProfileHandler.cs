@@ -80,8 +80,15 @@ public class UpdateProfileCommandHandler : ICommandHandler<UpdateProfileCommand,
             imageUrl = await _fileUpload.UploadImageAsync(dto.ProfileImageFile);
         }
 
-        
-        user.UpdateProfile(dto.Name, dto.Address, dto.Phone, dto.City, dto.Country, imageUrl);
+
+        user.UpdateProfile(
+                dto.Name,
+                dto.Address ?? string.Empty,
+                dto.Phone ?? string.Empty,
+                dto.City ?? string.Empty,
+                dto.Country ?? string.Empty,
+                imageUrl
+         );
         await _userManager.UpdateAsync(user);
 
         return new ProfileDto(

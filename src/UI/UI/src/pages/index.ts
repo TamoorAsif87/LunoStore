@@ -26,3 +26,4 @@ export { default as Checkout } from "./Checkout";
 export { default as CheckoutComplete } from "./CheckoutComplete";
 export { default as ViewOrder } from "./ViewOrder";
 export { default as MyOrders } from "./MyOrders";
+export { default as NotFound } from "./NotFound";

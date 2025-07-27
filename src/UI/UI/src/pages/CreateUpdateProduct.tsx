@@ -18,8 +18,10 @@ import {
 import FormInput from "../components/FormInput";
 import RichTextEditor from "../components/RichTextEditor";
 import Loading from "../components/Loading";
+import { useTitle } from "../hooks/useTitle";
 
 const CreateUpdateProduct = () => {
+  useTitle("Products | LunoStore");
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditMode = !!id;
