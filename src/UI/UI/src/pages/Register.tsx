@@ -9,8 +9,10 @@ import {
   registerSchema,
 } from "../features/auth/schemas/registerSchema";
 import { useRegister } from "../features/auth/hooks/useRegister";
+import { useTitle } from "../hooks/useTitle";
 
 const Register = () => {
+  useTitle("Register");
   const [serverError, setServerError] = useState<string | null>(null);
 
   const methods = useForm<RegisterFormValues>({

@@ -10,10 +10,12 @@ import CheckboxInput from "../components/CheckboxInput";
 import { useLogin } from "../features/auth/hooks/useLogin";
 import { useState } from "react";
 import { type AxiosError } from "axios";
+import { useTitle } from "../hooks/useTitle";
 
 // import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  useTitle("Login");
   const [serverError, setServerError] = useState<string | null>(null);
 
   const methods = useForm<LoginFormValues>({
