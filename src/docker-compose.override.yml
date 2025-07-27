@@ -1,0 +1,70 @@
+services:
+  inkwell:
+    image: postgres:15
+    container_name: inkwell
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=InkwellDb
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_inkwell:/var/lib/postgresql/data
+
+  distributedcache:
+    image: redis:7
+    container_name: distributedcache
+    restart: always
+    ports:
+      - "6379:6379"
+
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_NOAUTHENTICATION=true
+    ports:
+      - "9091:80"
+
+  messagebus:
+    image: rabbitmq:3-management
+    container_name: messagebus
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  api:
+    build:
+      context: ./Bootstrapper/Api
+      dockerfile: Dockerfile
+    container_name: api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      # - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Database=Server=inkwell;Port=5432;Database=InkwellDb;User Id=postgres;Password=postgres;Include Error Detail=true
+      - ConnectionStrings__Redis=distributedcache:6379
+      - MessageBroker__Host=amqp://messagebus:5672
+      - MessageBroker__UserName=guest
+      - MessageBroker__Password=guest
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:9091
+    ports:
+      - "5000:8080"
+      # - "6060:8081"
+    depends_on:
+      - inkwell
+      - distributedcache
+      - seq
+      - messagebus
+    volumes:
+      - ./Logs:/app/Logs
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  

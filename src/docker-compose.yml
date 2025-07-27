@@ -1,0 +1,24 @@
+services:
+ inkwell:
+    image: postgres
+ 
+ distributedcache:
+    image: redis
+
+ seq:
+    image: datalust/seq:latest
+ 
+ messagebus:
+    image: rabbitmq:management
+
+
+
+ api:
+    image: ${DOCKER_REGISTRY-}api
+    build:
+         context: ./Bootstrapper/Api
+         dockerfile: Dockerfile
+
+volumes:
+    postgres_inkwell:
+
